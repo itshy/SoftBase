@@ -6,28 +6,82 @@ import CardActionArea from '@material-ui/core/CardActionArea'
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography'
 
+import ExpansionPanel from '@material-ui/core/ExpansionPanel';
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
-const styles = {
+import CardActions from '@material-ui/core/CardActions';
+import Collapse from '@material-ui/core/Collapse';
+import IconButton from '@material-ui/core/IconButton';
+import classnames from 'classnames';
+
+
+const styles = theme => ({
   card: {
-    minWidth: 250,
-    minHeight: 350,
+    width: '15em',
   },
-}
+  actions: {
+    display: 'flex',
+  },
+  expand: {
+    transform: 'rotate(0deg)',
+    transition: theme.transitions.create('transform', {
+      duration: theme.transitions.duration.shortest,
+    }),
+    marginLeft: 'auto',
+    [theme.breakpoints.up('sm')]: {
+      marginRight: -8,
+    },
+  },
+  expandOpen: {
+    transform: 'rotate(180deg)',
+  },
+  nonSelected: {
+    userSelect: 'none',
+  }
+});
 
 class TableCard extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      expanded: false,
+    }
+  }
+
+  handleExpandClick = () => {
+    this.setState(state => ({ expanded: !state.expanded }))
+  }
+
   render() {
     
-    const { classes } = this.props;
+    const { classes } = this.props
 
     return (
       <Card className={classes.card}>
-        <CardActionArea>
+        <CardActions className={classes.actions} onMouseDown = {this.props.onMouseDown}>
+          <Typography className={classes.nonSelected}>Table 1</Typography>
+          <IconButton
+            className={classnames(classes.expand, {
+              [classes.expandOpen]: this.state.expanded,
+            })}
+            onClick={this.handleExpandClick}
+            aria-expanded={this.state.expanded}
+            aria-label="Show more"
+          >
+            <ExpandMoreIcon />
+          </IconButton>
+        </CardActions>
+        <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
           <CardContent>
-            <Typography gutterBottom variant="h5" component="h2">
-              Table
+            <Typography paragraph>Method:</Typography>
+            <Typography paragraph>
+              Heat 1/2 cup of the broth in a pot until simmering, add saffron and set aside for 10
+              minutes.
             </Typography>
           </CardContent>
-        </CardActionArea>
+        </Collapse>
       </Card>
     )
   }

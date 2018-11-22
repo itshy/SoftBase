@@ -1,5 +1,4 @@
 import React, { Component, createRef } from 'react'
-import { Rnd } from 'react-rnd'
 
 import { ConstructorWrapper, CardWrapper } from './styled'
 import TableCard from '../TableCard/index'
@@ -11,12 +10,13 @@ export default class Constructor extends Component {
     super(props)
 
     this.state = {
-      tablesNew: {},
+      tables: {},
     }
   }
 
 
   onMouseDown = (event) => {
+    this.setState({ mouseMove: true, })
     const elemPosition = event.currentTarget.getBoundingClientRect()
     const cursorPosition = {
       x: event.pageX,
@@ -27,32 +27,35 @@ export default class Constructor extends Component {
       y: cursorPosition.y - elemPosition.top,
     }
 
-    this.setState({tablesNew: positionInsideElement})
+    this.setState({tables: positionInsideElement})
 
     event.currentTarget.addEventListener('mousemove', this.onMouseMove)
   }
 
   onMouseUp = (event) => {
     event.currentTarget.removeEventListener('mousemove', this.onMouseMove)
+    this.setState({ mouseMove: false, })
   }
 
   onMouseMove = (event) => {
-    const elemPosition = event.currentTarget.getBoundingClientRect()
-    const cursorPosition = {
-      x: event.pageX,
-      y: event.pageY,
+    if (this.state.mouseMove) {
+      const cursorPosition = {
+        x: event.pageX,
+        y: event.pageY,
+      }
+      const positionInsideElement = this.state.tables
+      const cardTarget = document.querySelector('.child-target')
+  
+      cardTarget.style.left = (cursorPosition.x - positionInsideElement.x + pageXOffset) + "px"
+      cardTarget.style.top = (cursorPosition.y - positionInsideElement.y + pageYOffset) + "px"
     }
-    const positionInsideElement = this.state.tablesNew
-
-    event.currentTarget.style = "left: " + (cursorPosition.x - positionInsideElement.x) + "px ; top: " + (cursorPosition.y - positionInsideElement.y) + "px;"
   }
 
   render() {
     return (
-      <ConstructorWrapper>
-        {/* { this.renderCards() } */}
-        <CardWrapper onMouseDown={this.onMouseDown} onMouseUp={this.onMouseUp}>
-          <TableCard></TableCard>
+      <ConstructorWrapper onMouseMove={this.onMouseMove}>
+        <CardWrapper className={ "child-target" }  onMouseUp={this.onMouseUp}>
+          <TableCard onMouseDown={ this.onMouseDown }></TableCard>
         </CardWrapper>
       </ConstructorWrapper>
     )

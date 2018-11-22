@@ -2,8 +2,8 @@ import styled from 'styled-components'
 
 
 export const ConstructorWrapper = styled.div`
-  min-width: 100vw;
-  min-height: 100vh;
+  min-width: 10000px;
+  min-height: 10000px;
   position: relative;
 `
 
