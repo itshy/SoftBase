@@ -50,6 +50,12 @@ class TableCard extends Component {
     }
   }
 
+  onMouseDown = (event) => {
+    const {onMouseDown} = this.props
+
+    onMouseDown(event, this.props.index)
+  }
+
   handleExpandClick = () => {
     this.setState(state => ({ expanded: !state.expanded }))
   }
@@ -60,8 +66,8 @@ class TableCard extends Component {
 
     return (
       <Card className={classes.card}>
-        <CardActions className={classes.actions} onMouseDown = {this.props.onMouseDown}>
-          <Typography className={classes.nonSelected}>Table 1</Typography>
+        <CardActions className={classes.actions} onMouseDown = {this.onMouseDown}>
+          <Typography className={classes.nonSelected}>Table {this.props.index}</Typography>
           <IconButton
             className={classnames(classes.expand, {
               [classes.expandOpen]: this.state.expanded,

@@ -10,7 +10,9 @@ export default class AppPage extends Component {
     return (
       <Fragment>
         <Header></Header>
-        <Constructor></Constructor>
+        <Constructor
+          data={ {} }
+        />
         <ActionMenu></ActionMenu>
       </Fragment>
     )

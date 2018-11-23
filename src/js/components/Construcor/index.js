@@ -10,7 +10,14 @@ export default class Constructor extends Component {
     super(props)
 
     this.state = {
-      tables: {},
+      tables: [
+        {
+          positionInsideElement: {},
+        },
+        {
+          positionInsideElement: {},
+        },
+      ],
     }
   }
 
@@ -32,6 +39,26 @@ export default class Constructor extends Component {
     event.currentTarget.addEventListener('mousemove', this.onMouseMove)
   }
 
+  onMouseDownTest = (event, index) => {
+    this.setState({ mouseMove: true, })
+    const elemPosition = event.currentTarget.getBoundingClientRect()
+    const cursorPosition = {
+      x: event.pageX,
+      y: event.pageY,
+    }
+    const positionInsideElement = {
+      x: cursorPosition.x - elemPosition.left,
+      y: cursorPosition.y - elemPosition.top,
+    }
+    const tables = this.state.tables
+
+    tables[index].positionInsideElement = positionInsideElement
+    this.setState({tables: tables})
+    this.props.data.indexUsedTable = index
+
+    event.currentTarget.addEventListener('mousemove', this.onMouseMove)
+  }
+
   onMouseUp = (event) => {
     event.currentTarget.removeEventListener('mousemove', this.onMouseMove)
     this.setState({ mouseMove: false, })
@@ -43,20 +70,39 @@ export default class Constructor extends Component {
         x: event.pageX,
         y: event.pageY,
       }
-      const positionInsideElement = this.state.tables
-      const cardTarget = document.querySelector('.child-target')
+      const index = this.props.data.indexUsedTable
+      const positionInsideElement = this.state.tables[index].positionInsideElement
+      const cardTarget = document.querySelector('.child-target:nth-child(' + (index+1) + ')')
   
       cardTarget.style.left = (cursorPosition.x - positionInsideElement.x + pageXOffset) + "px"
       cardTarget.style.top = (cursorPosition.y - positionInsideElement.y + pageYOffset) + "px"
     }
   }
 
+  renderTables() {
+    const tables = this.state.tables
+    console.log('rerender')
+    return (
+      tables.map((item, index) => {
+        return (
+          <CardWrapper className={"child-target"} onMouseUp={this.onMouseUp} key = { index } index = { index }>
+            <TableCard
+              onMouseDown = { this.onMouseDownTest }
+              key = { index }
+              index = { index }
+              data = { item }
+            />
+          </CardWrapper>
+        )
+      })
+    )
+  }
+
   render() {
     return (
       <ConstructorWrapper onMouseMove={this.onMouseMove}>
-        <CardWrapper className={ "child-target" }  onMouseUp={this.onMouseUp}>
-          <TableCard onMouseDown={ this.onMouseDown }></TableCard>
-        </CardWrapper>
+        {/* <TableCard onMouseDown={ this.onMouseDown }></TableCard> */}
+        { this.renderTables() }
       </ConstructorWrapper>
     )
   }
