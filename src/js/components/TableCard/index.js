@@ -1,20 +1,17 @@
 import React, { Component } from 'react'
 
+import TableTabs from '../TableTabs/'
+
 import { withStyles } from '@material-ui/core/styles'
 import Card from '@material-ui/core/Card'
-import CardActionArea from '@material-ui/core/CardActionArea'
-import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography'
 
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 
-import CardActions from '@material-ui/core/CardActions';
-import Collapse from '@material-ui/core/Collapse';
-import IconButton from '@material-ui/core/IconButton';
-import classnames from 'classnames';
+import CardActions from '@material-ui/core/CardActions'
+import Collapse from '@material-ui/core/Collapse'
+import IconButton from '@material-ui/core/IconButton'
+import classnames from 'classnames'
 
 
 const styles = theme => ({
@@ -50,24 +47,28 @@ class TableCard extends Component {
     }
   }
 
-  onMouseDown = (event) => {
-    const {onMouseDown} = this.props
-
-    onMouseDown(event, this.props.index)
+  // Check index catched card for render
+  shouldComponentUpdate(nextProps) {
+    return this.props.catchedTable === this.props.index
   }
 
   handleExpandClick = () => {
     this.setState(state => ({ expanded: !state.expanded }))
   }
 
+  onMouseDown = (event) => {
+    const {onMouseDownHanlder} = this.props
+
+    onMouseDownHanlder(event, this.props.index)
+  }
+
   render() {
-    
     const { classes } = this.props
 
     return (
       <Card className={classes.card}>
-        <CardActions className={classes.actions} onMouseDown = {this.onMouseDown}>
-          <Typography className={classes.nonSelected}>Table {this.props.index}</Typography>
+        <CardActions className={classes.actions} onMouseDown={ this.onMouseDown } onMouseUp={ this.props.onMouseUpHandler }>
+          <Typography className={classes.nonSelected} variant="subtitle1">Table {this.props.index}</Typography>
           <IconButton
             className={classnames(classes.expand, {
               [classes.expandOpen]: this.state.expanded,
@@ -80,13 +81,7 @@ class TableCard extends Component {
           </IconButton>
         </CardActions>
         <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
-          <CardContent>
-            <Typography paragraph>Method:</Typography>
-            <Typography paragraph>
-              Heat 1/2 cup of the broth in a pot until simmering, add saffron and set aside for 10
-              minutes.
-            </Typography>
-          </CardContent>
+            <TableTabs />
         </Collapse>
       </Card>
     )

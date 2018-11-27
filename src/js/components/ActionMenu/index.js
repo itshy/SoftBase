@@ -1,4 +1,8 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
+
+import { addNewTableAction } from '../../actions/index'
+
 import { withStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import AddIcon from '@material-ui/icons/Add'
@@ -19,13 +23,17 @@ const styles = theme => ({
 });
 
 class ActionMenu extends Component {
-  render() {
 
-    const { classes } = this.props;
+  addNewTable = () => {
+    this.props.addNewTable()
+  }
+
+  render() {
+    const { classes } = this.props
 
     return (
       <WrapperActionMenu>
-        <Button variant="fab" color="primary" aria-label="Add" className={classes.button}>
+        <Button variant="fab" color="primary" aria-label="Add" className={classes.button} onClick={ this.addNewTable }>
           <AddIcon />
         </Button>
         <Button variant="fab" color="secondary" aria-label="Edit" className={classes.button}>
@@ -43,4 +51,12 @@ class ActionMenu extends Component {
   }
 }
 
-export default withStyles(styles)(ActionMenu);
+const mapStateToProps = (state) => ({
+
+})
+const dispatchToProps = (dispatch) => ({
+  addNewTable: () => dispatch(addNewTableAction())
+})
+
+const ActionMenuConnect = connect(mapStateToProps, dispatchToProps)(ActionMenu)
+export default withStyles(styles)(ActionMenuConnect)

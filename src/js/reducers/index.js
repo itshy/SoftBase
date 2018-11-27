@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux'
 
-import { empty } from './empty'
+import { tablesReducer } from './tables'
 
 
 export const rootReducer = combineReducers({
-  empty,
+  tablesReducer,
 })

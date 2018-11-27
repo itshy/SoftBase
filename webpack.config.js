@@ -52,4 +52,8 @@ module.exports = {
       chunkFilename: '[id].css',
     }),
   ],
+  // devServer: {
+  //   inline: true,
+  //   port: 9002,
+  // },
 }
