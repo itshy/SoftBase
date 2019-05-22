@@ -10,7 +10,7 @@ export default class App extends Component {
   render() {
     return (
       <Switch>
-        <Route exact path='/' component={ Home } />
+        <Route exact path='/' component={ AppPage } />
         <Route path='/app/' component={ AppPage } />
       </Switch>
     )
